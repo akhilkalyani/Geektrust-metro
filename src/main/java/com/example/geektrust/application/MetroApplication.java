@@ -12,15 +12,14 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class MetroApplication {
-    private final MetroCardRepository cardRepo;
-    private final StationStatsRepository statsRepo;
     private final MetroService metroService;
-    private BufferedReader reader = null;
+    private BufferedReader reader;
 
     public MetroApplication(String filePath) {
-        cardRepo = new MetroCardRepository();
-        statsRepo = new StationStatsRepository();
+        MetroCardRepository cardRepo = new MetroCardRepository();
+        StationStatsRepository statsRepo = new StationStatsRepository();
         metroService = new MetroService(cardRepo, statsRepo);
+        reader = null;
         try {
             reader = new BufferedReader(new FileReader(filePath));
         } catch (FileNotFoundException e) {

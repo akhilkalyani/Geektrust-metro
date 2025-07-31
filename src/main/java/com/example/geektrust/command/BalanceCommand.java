@@ -3,7 +3,7 @@ package com.example.geektrust.command;
 import com.example.geektrust.service.MetroService;
 
 public class BalanceCommand implements ICommand{
-    private int balance;
+    private final int balance;
     private final String cardId;
     private final MetroService metroService;
 
