@@ -40,8 +40,6 @@ public class MetroService {
             int rechargeAmount = actualFare - balance;
             int serviceFee = (int) Math.ceil(rechargeAmount * 0.02);
             card.recharge(rechargeAmount);
-
-            // ✅ Correct: add fee to origin station, not current station
             statsRepo.addCollection(station, serviceFee, 0);
         }
 
