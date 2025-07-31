@@ -36,7 +36,7 @@ public class MetroApplication {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            processCommand(line.trim(), metroService);
+            processCommand(line.trim());
         }
         try {
             reader.close();
@@ -45,7 +45,7 @@ public class MetroApplication {
         }
     }
 
-    private void processCommand(String line, MetroService metroService) {
+    private void processCommand(String line) {
         String[] tokens = line.split(" ");
         switch (tokens[0]) {
             case "BALANCE":
