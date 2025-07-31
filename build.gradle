@@ -1,0 +1,80 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+}
+
+group = 'com.example'
+version = '1.0'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+jacoco {
+    toolVersion = "0.8.4"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+jacocoTestReport {
+    reports {
+        xml.required.set(true)
+        csv.required.set(false)
+        html.required.set(false)
+        xml.outputLocation.set(file("./jacoco.xml"))
+    }
+
+    classDirectories.setFrom(
+            files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        '**/model/**',        // optional, if you want to exclude DTOs
+                        '**/repository/**',   // optional
+                        '**/Main.class',      // often not useful to cover Main
+                        '**/app/**',
+                        '**/config/**',       // if any
+                        '**/generated/**'     // common exclusions
+                ])
+            })
+    )
+}
+
+
+jar {
+    archiveBaseName = 'geektrust' // DO NOT CHANGE
+    version = null                // DO NOT CHANGE
+    manifest {
+        attributes 'Main-Class': 'com.example.geektrust.Main' // ✅ MATCH YOUR PACKAGE NAME HERE
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "PASSED", "SKIPPED", "FAILED", "STANDARD_ERROR"
+    }
+    finalizedBy jacocoTestReport
+    afterSuite { desc, result ->
+        if (!desc.parent)
+            println("${result.resultType} " +
+                    "(${result.testCount} tests, " +
+                    "${result.successfulTestCount} successes, " +
+                    "${result.failedTestCount} failures, " +
+                    "${result.skippedTestCount} skipped)")
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
+}
