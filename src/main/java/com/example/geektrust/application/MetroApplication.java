@@ -28,17 +28,9 @@ public class MetroApplication {
     }
 
     public void run() {
-        String line;
-
-        while (true) {
-            try {
-                if ((line = reader.readLine()) == null) break;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            processCommand(line.trim());
-        }
         try {
+            String line;
+            while ((line = reader.readLine()) != null) processCommand(line.trim());
             reader.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -49,10 +41,10 @@ public class MetroApplication {
         String[] tokens = line.split(" ");
         switch (tokens[0]) {
             case "BALANCE":
-                new BalanceCommand(tokens,metroService).run();
+                new BalanceCommand(tokens, metroService).run();
                 break;
             case "CHECK_IN":
-                new CheckInCommand(tokens,metroService).run();
+                new CheckInCommand(tokens, metroService).run();
                 break;
             case "PRINT_SUMMARY":
                 metroService.printSummary();
